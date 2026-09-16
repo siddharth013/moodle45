@@ -12,5 +12,5 @@
 defined('MOODLE_INTERNAL') || die();
 
 $plugin->component = 'local_tuitionattendance';
-$plugin->version   = 2026091700;
+$plugin->version   = 2026091701;
 $plugin->requires  = 2024042200;
