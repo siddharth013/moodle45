@@ -98,6 +98,15 @@ if ($data = $mform->get_data()) {
         (int) $data->courseid
     );
 
+    $attendancemanager =
+    new \local_tuitionattendance\local\attendance_manager();
+
+$existingattendance =
+    $attendancemanager->get_attendance_for_session(
+        (int) $data->courseid,
+        (int) $data->sessiondate
+    );
+
     echo $OUTPUT->header();
 
     echo $OUTPUT->heading('Mark Attendance');
@@ -145,13 +154,28 @@ if ($data = $mform->get_data()) {
             $absentid =
                 'attendance_absent_' . $student->id;
 
-            $present = html_writer::empty_tag('input', [
-                'type' => 'radio',
-                'id' => $presentid,
-                'name' => 'attendance[' . $student->id . ']',
-                'value' => 'present',
-                'checked' => 'checked'
-            ]);
+            $presentchecked = true;
+
+if (isset($existingattendance[$student->id])) {
+    $presentchecked =
+        $existingattendance[$student->id]->status === 'present';
+}
+
+$presentattributes = [
+    'type' => 'radio',
+    'id' => $presentid,
+    'name' => 'attendance[' . $student->id . ']',
+    'value' => 'present'
+];
+
+if ($presentchecked) {
+    $presentattributes['checked'] = 'checked';
+}
+
+$present = html_writer::empty_tag(
+    'input',
+    $presentattributes
+);
 
             $presentlabel = html_writer::tag(
                 'label',
@@ -159,12 +183,28 @@ if ($data = $mform->get_data()) {
                 ['for' => $presentid]
             );
 
-            $absent = html_writer::empty_tag('input', [
-                'type' => 'radio',
-                'id' => $absentid,
-                'name' => 'attendance[' . $student->id . ']',
-                'value' => 'absent'
-            ]);
+            $absentchecked = false;
+
+if (isset($existingattendance[$student->id])) {
+    $absentchecked =
+        $existingattendance[$student->id]->status === 'absent';
+}
+
+$absentattributes = [
+    'type' => 'radio',
+    'id' => $absentid,
+    'name' => 'attendance[' . $student->id . ']',
+    'value' => 'absent'
+];
+
+if ($absentchecked) {
+    $absentattributes['checked'] = 'checked';
+}
+
+$absent = html_writer::empty_tag(
+    'input',
+    $absentattributes
+);
 
             $absentlabel = html_writer::tag(
                 'label',

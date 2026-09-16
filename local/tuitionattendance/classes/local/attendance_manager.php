@@ -84,4 +84,36 @@ class attendance_manager {
             'sessiondate' => $sessiondate,
         ]);
     }
+
+        /**
+     * Get all attendance records for a course and session date.
+     *
+     * @param int $courseid Moodle course ID.
+     * @param int $sessiondate Unix timestamp for the session date.
+     * @return array Attendance records indexed by user ID.
+     */
+    public function get_attendance_for_session(
+        int $courseid,
+        int $sessiondate
+    ): array {
+        global $DB;
+
+        $records = $DB->get_records(
+            'tuitionattendance',
+            [
+                'courseid' => $courseid,
+                'sessiondate' => $sessiondate,
+            ],
+            '',
+            'id, courseid, userid, sessiondate, status'
+        );
+
+        $attendance = [];
+
+        foreach ($records as $record) {
+            $attendance[$record->userid] = $record;
+        }
+
+        return $attendance;
+    }
 }
