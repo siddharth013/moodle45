@@ -13,9 +13,24 @@ require(__DIR__ . '/../../config.php');
 
 require_login();
 
-$context = context_system::instance();
+// $context = context_system::instance();
+// $PAGE->set_context($context);
+
+$courseid = optional_param('courseid', 0, PARAM_INT);
+
+if ($courseid) {
+    $context = context_course::instance($courseid);
+} else {
+    $context = context_system::instance();
+}
+
+require_capability(
+    'local/tuitionattendance:markattendance',
+    $context
+);
 
 $PAGE->set_context($context);
+
 $PAGE->set_url(new moodle_url('/local/tuitionattendance/attendance.php'));
 $PAGE->set_title('Mark Attendance');
 $PAGE->set_heading('Mark Tuition Attendance');

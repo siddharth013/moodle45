@@ -2,7 +2,7 @@
 // This file is part of Moodle - https://moodle.org/
 
 /**
- * Language strings for the Tuition Attendance plugin.
+ * Language strings.
  *
  * @package    local_tuitionattendance
  * @copyright  2026 Siddharth Patel
@@ -10,3 +10,4 @@
  */
 
 $string['pluginname'] = 'Tuition Attendance';
+$string['tuitionattendance:markattendance'] = 'Mark student attendance';
